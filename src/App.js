@@ -6,15 +6,19 @@ function App() {
   const row2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
   const row3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACK'];
 
-  const [guess1, setGuess1] = useState('')
-  const [word, setWord] = useState('');
+  const [guess1, setGuess1] = useState([]);
 
   useEffect(() => {
     function handleKeyDown(e) {
-      if (/^(?:[A-Za-z]+)$/.test(e.key) && e.key.length === 1) {
-        setWord(word + e.key.toUpperCase());
+      if (
+        /^(?:[A-Za-z]+)$/.test(e.key) &&
+        e.key.length === 1 &&
+        guess1.length < 5
+      ) {
+        setGuess1(guess1 + e.key.toUpperCase());
       } else if (e.code === 'Backspace' || e.key === 'BACK') {
-        setWord(word.slice(0, -1));
+        setGuess1(guess1.slice(0, -1));
+      } else if (e.code === 'Enter' || e.key === 'ENTER') {
       } else {
         return;
       }
@@ -30,9 +34,11 @@ function App() {
   function handleKeyboardButton(button) {
     console.log(`Button ${button}`);
     if (button === 'BACK') {
-      setWord(word.slice(0, -1));
+      setGuess1(guess1.slice(0, -1));
+    } else if (guess1.length === 5) {
+      return;
     } else {
-      setWord(word + button);
+      setGuess1(guess1 + button);
     }
   }
 
@@ -42,118 +48,120 @@ function App() {
         <p className="header">Friendle</p>
       </header>
       <container className="App-container">
-        <div className="game-board">
-          <div className="game-row">
-            <div className="game-inner-row">
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-            </div>
-          </div>
-          <div className="game-row">
-            <div className="game-inner-row">
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
+        <div className="game-board-container">
+          <div className="game-board">
+            <div className="game-row">
+              <div className="game-inner-row">
+                <div className="game-tile">
+                  <div className="tile">{guess1[0]}</div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile">{guess1[1]}</div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile">{guess1[2]}</div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile">{guess1[3]}</div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile">{guess1[4]}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="game-row">
-            <div className="game-inner-row">
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-            </div>
-          </div>
-          <div className="game-row">
-            <div className="game-inner-row">
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
+            <div className="game-row">
+              <div className="game-inner-row">
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="game-row">
-            <div className="game-inner-row">
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
+            <div className="game-row">
+              <div className="game-inner-row">
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="game-row">
-            <div className="game-inner-row">
-              <div className="game-tile">
-                <div className="tile"></div>
+            <div className="game-row">
+              <div className="game-inner-row">
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
               </div>
-              <div className="game-tile">
-                <div className="tile"></div>
+            </div>
+            <div className="game-row">
+              <div className="game-inner-row">
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
               </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
-              </div>
-              <div className="game-tile">
-                <div className="tile"></div>
+            </div>
+            <div className="game-row">
+              <div className="game-inner-row">
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
+                <div className="game-tile">
+                  <div className="tile"></div>
+                </div>
               </div>
             </div>
           </div>
