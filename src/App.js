@@ -2,26 +2,42 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const row1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
-  const row2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
-  const row3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACK'];
+  const rows = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACK'],
+  ];
 
-  const [guess1, setGuess1] = useState([]);
+  const [indexedGuesses, setIndexedGuesses] = useState(
+    [0, 0, [...new Array(6)].map((_) => [...new Array(5)].map((_) => ''))]
+  );
+
+  console.log(indexedGuesses);
+
+  function handleSubGuess(key) {
+    const [rowIndex, columnIndex, guesses] = indexedGuesses;
+    if (
+      /^(?:[A-Za-z]+)$/.test(key) &&
+      key.length === 1 &&
+      guesses[rowIndex][4] === ''
+    ) {
+      guesses[rowIndex][columnIndex] = key;
+      setIndexedGuesses([rowIndex, columnIndex + 1, guesses]);
+      return;
+    }
+    if (key === 'Backspace') {
+      guesses[rowIndex][columnIndex] = '';
+      setIndexedGuesses([rowIndex, columnIndex - 1, guesses]);
+      return;
+    }
+    if (key === 'Enter' && guesses[rowIndex][4] !== '') {
+      setIndexedGuesses([rowIndex + 1, 0, guesses]);
+    }
+  }
 
   useEffect(() => {
     function handleKeyDown(e) {
-      if (
-        /^(?:[A-Za-z]+)$/.test(e.key) &&
-        e.key.length === 1 &&
-        guess1.length < 5
-      ) {
-        setGuess1(guess1 + e.key.toUpperCase());
-      } else if (e.code === 'Backspace' || e.key === 'BACK') {
-        setGuess1(guess1.slice(0, -1));
-      } else if (e.code === 'Enter' || e.key === 'ENTER') {
-      } else {
-        return;
-      }
+      handleSubGuess(e.key);
     }
 
     document.addEventListener('keydown', handleKeyDown);
@@ -33,13 +49,7 @@ function App() {
 
   function handleKeyboardButton(button) {
     console.log(`Button ${button}`);
-    if (button === 'BACK') {
-      setGuess1(guess1.slice(0, -1));
-    } else if (guess1.length === 5) {
-      return;
-    } else {
-      setGuess1(guess1 + button);
-    }
+    handleSubGuess(button);
   }
 
   return (
@@ -47,162 +57,44 @@ function App() {
       <header className="App-header">
         <p className="header">Friendle</p>
       </header>
-      <container className="App-container">
+      <div className="App-container">
         <div className="game-board-container">
           <div className="game-board">
-            <div className="game-row">
-              <div className="game-inner-row">
-                <div className="game-tile">
-                  <div className="tile">{guess1[0]}</div>
+            {[...Array(6).keys()].map((i) => {
+              console.log(`${i}-i`);
+              return (
+                <div className="game-row">
+                  <div className="game-inner-row">
+                    {[...Array(5).keys()].map((j) => {
+                      return (
+                        <div className="game-tile">
+                          <div className="tile">{indexedGuesses[2][i][j]}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="game-tile">
-                  <div className="tile">{guess1[1]}</div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile">{guess1[2]}</div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile">{guess1[3]}</div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile">{guess1[4]}</div>
-                </div>
-              </div>
-            </div>
-            <div className="game-row">
-              <div className="game-inner-row">
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-              </div>
-            </div>
-            <div className="game-row">
-              <div className="game-inner-row">
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-              </div>
-            </div>
-            <div className="game-row">
-              <div className="game-inner-row">
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-              </div>
-            </div>
-            <div className="game-row">
-              <div className="game-inner-row">
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-              </div>
-            </div>
-            <div className="game-row">
-              <div className="game-inner-row">
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-                <div className="game-tile">
-                  <div className="tile"></div>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
-        <div className="keyboard-row">
-          {row1.map((letter) => {
-            return (
-              <button
-                className="keyboard-button"
-                onClick={() => handleKeyboardButton(letter)}
-              >
-                {letter}
-              </button>
-            );
-          })}
-        </div>
-        <div className="keyboard-row">
-          {row2.map((letter) => {
-            return (
-              <button
-                className="keyboard-button"
-                onClick={() => handleKeyboardButton(letter)}
-              >
-                {letter}
-              </button>
-            );
-          })}
-        </div>
-        <div className="keyboard-row">
-          {row3.map((letter) => {
-            return (
-              <button
-                className="keyboard-button"
-                onClick={() => handleKeyboardButton(letter)}
-              >
-                {letter}
-              </button>
-            );
-          })}
-        </div>
-      </container>
+        {rows.map((row) => {
+          return (
+            <div className="keyboard-row">
+              {row.map((letter) => {
+                return (
+                  <button
+                    className="keyboard-button"
+                    onClick={() => handleKeyboardButton(letter)}
+                  >
+                    {letter}
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
