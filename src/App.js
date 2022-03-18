@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import words from 'an-array-of-english-words';
+
+// Jaylen Was Here @ 3/16/22 - 12:05 AM
+
+const rowCount = 6;
+const columnCount = 5;
 
 function App() {
   const rows = [
@@ -9,7 +15,7 @@ function App() {
   ];
 
   const [indexedGuesses, setIndexedGuesses] = useState(
-    [0, 0, [...new Array(6)].map((_) => [...new Array(5)].map((_) => ''))]
+    [0, 0, [...new Array(rowCount)].map((_) => [...new Array(columnCount)].map((_) => ''))]
   );
 
   console.log(indexedGuesses);
@@ -19,19 +25,27 @@ function App() {
     if (
       /^(?:[A-Za-z]+)$/.test(key) &&
       key.length === 1 &&
-      guesses[rowIndex][4] === ''
+      columnIndex < columnCount
     ) {
-      guesses[rowIndex][columnIndex] = key;
+      guesses[rowIndex][columnIndex] = key.toUpperCase();
       setIndexedGuesses([rowIndex, columnIndex + 1, guesses]);
       return;
     }
-    if (key === 'Backspace') {
+    if (key === 'Backspace' && columnIndex > 0) {
       guesses[rowIndex][columnIndex] = '';
       setIndexedGuesses([rowIndex, columnIndex - 1, guesses]);
       return;
     }
-    if (key === 'Enter' && guesses[rowIndex][4] !== '') {
-      setIndexedGuesses([rowIndex + 1, 0, guesses]);
+    if (key === 'Enter' && guesses[rowIndex][columnCount - 1] !== '' && rowIndex <= rowCount - 1) {
+      // console.log('Testing: ' + guesses[rowIndex]);
+      const word = guesses[rowIndex].toString().replaceAll(',', '')
+      console.log('List: ' + typeof(guesses[rowIndex]))
+      console.log('String: ' + word.toLowerCase())
+      if ((words.filter(w => w.length === 5)).includes(word.toLowerCase())) {
+        setIndexedGuesses([rowIndex + 1, 0, guesses]);
+      } else {
+        alert('Not a vaild word!');        
+      }
     }
   }
 
